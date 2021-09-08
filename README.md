@@ -8,3 +8,10 @@ All the implementations provided are roughly identical in what they provide to y
  * a recommended library to use for tests
  
 The mixing algorithm and any other changes are left for you to implement.
+
+Mixer flow:
+1. User provides a lsit of new, unused addresses to mixer
+2. Mixer provides user with a new deposit address owned by mixer
+3. User transfers coins to deposit address
+4. Mixer transfers from deposit address to house address
+5. Over time mixer distributes user's btc to unused addresses from (1)
