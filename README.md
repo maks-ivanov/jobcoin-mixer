@@ -19,6 +19,7 @@ Mixer flow:
 ## Jobcoin Mixer:
 
 To run: `python cli.py`
+Tests: `pytest tests/test_jobcoin.py`
 * CLI
     * Creates and starts up a mixer
     * Prompts user for input, performs basic input checks
