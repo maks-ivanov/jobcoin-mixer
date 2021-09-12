@@ -1,8 +1,12 @@
 import sys
-sys.exit('\n!!! Please update config.py with your personal Jobcoin URL and '
-         'remove this message.\n')
-
 # Replace the URL below
-API_BASE_URL = 'https://jobcoin.projecticeland.net/changeme/api'
+API_BASE_URL = 'https://jobcoin.gemini.com/chalice-facial/api'
 API_ADDRESS_URL = '{}/addresses'.format(API_BASE_URL)
 API_TRANSACTIONS_URL = '{}/transactions'.format(API_BASE_URL)
+HOUSE_ADDRESS = 'HAUS'
+
+NUM_ADDRESS_POLLERS = 1
+NUM_REQUEST_PROCESSORS = 2
+REQUEST_PROCESSOR_SLEEP_SECONDS = 2
+ADDRESS_POLLER_SLEEP_SECONDS = 2
+TRUNCATE_DIGITS = 9
