@@ -41,7 +41,7 @@ Tests: `pytest tests/test_jobcoin.py`
         * Persist the deposit address : return_addresses mappings in a database
             * Mixer needs to remember previous addresses already provided to it to recover from unexpected shutdowns
             * The in-memory dict growing too large can cause out of memory exception
-            * If there are two many addresses for one mixer, storing address mappings in DB allows us to spin up multiple mixer processes in parallel, perhaps configuring them to be responsible for smaller address segments
+            * If there are too many addresses for one mixer, storing address mappings in DB allows us to spin up multiple mixer processes in parallel, perhaps configuring them to be responsible for smaller address segments
         * Persist and update how many coins are owed to each address pair
     * Lots of places in code assume that rest api just works all the time
 * Security
