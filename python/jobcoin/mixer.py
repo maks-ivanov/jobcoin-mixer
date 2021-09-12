@@ -27,6 +27,8 @@ class Mixer:
 		self.mix_accounts[deposit_address] = set(shuffle_copy)
 		self.deposit_addresses.put(deposit_address)
 
+	def transfer_to_house(self, deposit_address, balance):
+		return send_coin(deposit_address, self.house_address, balance)
 
 	def begin_mixing(self, deposit_address, amount):
 		return_addresses = self.mix_accounts[deposit_address]
@@ -35,9 +37,6 @@ class Mixer:
 		if not success:
 			return # log error here
 		self.mix_requests.put(mix_request)
-
-	def transfer_to_house(self, deposit_address, balance):
-		return send_coin(deposit_address, self.house_address, balance)
 
 	def handle_request(self, mix_request):
 		return_addresses = set(mix_request.return_addresses)
