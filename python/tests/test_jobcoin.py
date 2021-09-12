@@ -50,6 +50,11 @@ def test_get_balance():
     balance = jobcoin.get_balance('Alice')
     assert balance == 37.0
 
+def test_check_address_unused():
+    assert not jobcoin.check_address_unused('Alice')
+    assert jobcoin.check_address_unused('DO_NOT_USE')
+
+
 def test_send_coin():
     starting_balance_alice = jobcoin.get_balance('Alice')
     starting_balance_bob = jobcoin.get_balance('Bob')
