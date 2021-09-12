@@ -16,7 +16,9 @@ Mixer flow:
 4. Mixer transfers from deposit address to house address
 5. Over time mixer distributes user's btc to unused addresses from (1)
 
-Jobcoin Mixer:
+## Jobcoin Mixer:
+
+To run: `python cli.py`
 * CLI
     * Creates and starts up a mixer
     * Prompts user for input, performs basic input checks
@@ -31,7 +33,8 @@ Jobcoin Mixer:
         * Else picks a random address from the list of return addresses, along with a random amount uniformly between 10E-9 and requested amount, and sends the transaction
         * Generates a new mix request with remaining addresses and remaining amounts and puts it back on the queue
     * Mixer numeric precision is configured to be truncated to 9 digits, any dust below that amount may be considered a mixing fee.
-What’s next:
+
+## What’s next:
 * Fault Tolerance and Scalability
     * Right now the whole app is in memory. If it shuts down in the middle of mixing, coins will be lost. The following changes needs to be persisted for the mixer to be able to scale and recover from failures
         * Persist the deposit address : return_addresses mappings in a database
