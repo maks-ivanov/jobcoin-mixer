@@ -19,11 +19,11 @@ def send_coin(from_, to, amount):
 	r = requests.post(config.API_TRANSACTIONS_URL, data=data)
 	if r.status_code == 200:
 		return True
-	
+
 	return False
 
-def check_address_unused(address):
-	return len(requests.get(config.API_ADDRESS_URL + '/' + address).json()['transactions']) == 0
+def has_transactions(address):
+	return len(requests.get(config.API_ADDRESS_URL + '/' + address).json()['transactions']) > 0
 
 def truncate(number, digits=config.TRUNCATE_DIGITS):
     stepper = 10.0 ** digits

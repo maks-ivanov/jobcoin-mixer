@@ -4,6 +4,7 @@ from queue import Queue
 from random import uniform, shuffle
 import threading
 from jobcoin import *
+from db_client import DbClient
 
 class Mixer:
 	def __init__(self):
@@ -21,7 +22,7 @@ class Mixer:
 		for t in self.address_pollers + self.request_processors:
 			t.daemon = True
 
-	def create_mix_account(self, deposit_address, return_addresses):
+	def load_mix_account_in_memory(self, deposit_address, return_addresses):
 		shuffle_copy = return_addresses[:]
 		shuffle(shuffle_copy)
 		self.mix_accounts[deposit_address] = set(shuffle_copy)
@@ -103,6 +104,19 @@ class Mixer:
 
 	def stop(self):
 		self.run_threads = False
+
+	def restore(self):
+		t = threading.Thread(target=self.load_accounts_from_db)
+		t.daemon = True
+		t.start()
+
+	def load_accounts_from_db(self):
+		client = DbClient()
+		deposit_addresses = client.get_deposit_address()
+		for deposit_address in deposit_addresses:
+			return_addresses = client.get_return_addresses(deposit_address)
+			self.load_mix_account_in_memory(deposit_address, return_addresses)
+
 
 class MixRequest:
 	def __init__(self, return_addresses, amount):

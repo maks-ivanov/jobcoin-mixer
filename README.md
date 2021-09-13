@@ -23,9 +23,10 @@ Tests: `pytest tests/test_jobcoin.py`
 * CLI
     * Creates and starts up a mixer
     * Prompts user for input, performs basic input checks
-    * Generates a deposit address, passes it along with return addresses to the mixer
+    * Generates a deposit address, writes addressed to db, passes it along with return addresses to the mixer
     * Displays deposit address back to the user
 * Mixer
+	* Loads allocated addresses from database as well as accepts new ones from CLI
     * A configurable number of poller threads watch deposit addresses for balance
         * Once balance is detected, transfers coins to house account and puts a mix request (balance, return addresses) on the queue
     * A configurable number of request processor threads are monitoring the mix request queue
@@ -37,22 +38,20 @@ Tests: `pytest tests/test_jobcoin.py`
 
 ## What’s next:
 * Fault Tolerance and Scalability
-    * Right now the whole app is in memory. If it shuts down in the middle of mixing, coins will be lost. The following changes needs to be persisted for the mixer to be able to scale and recover from failures
-        * Persist the deposit address : return_addresses mappings in a database
-            * Mixer needs to remember previous addresses already provided to it to recover from unexpected shutdowns
-            * The in-memory dict growing too large can cause out of memory exception
-            * If there are too many addresses for one mixer, storing address mappings in DB allows us to spin up multiple mixer processes in parallel, perhaps configuring them to be responsible for smaller address segments
-        * Persist and update how many coins are owed to each address pair
-    * Lots of places in code assume that rest api just works all the time
+    * Mixer needs to be able to restore full mixing state after shutdown. Right now it will only load address mappings but not coins owed to each address, meaning that if a mixer crashes after transfering to house address but before returning full amount, coins will be lost. 
+    	* This can be at least partially solved by some combination of storing how many coins are owed in DB + replaying transactions to back out most up-to-date state.
+    * Mixers should scale horizontally - segment address space and spin up multiple mixers that handle some small number of segments
+    * Lots of places in code assume that rest api just works all the time.
 * Security
-    * All methods and variables are currently public to make unit testing easier, but essentially everything about the mixer except start, stop, and create_mix_account should be private
-    * Sanitize inputs
+    * All methods and variables are currently public to make unit testing easier, but essentially everything about the mixer except start, stop, restore, and create_mix_account should be private
+    * Sanitize inputs, DB is currently wide open
     * All addresses should be encrypted
 * Maintainability and usability
     * Add logging to mixer
     * Make a package
     * Deploy to cloud
 * Mixer algorithm
+	* Use multiple house addresses
     * Right now each mixed sum is split into N transactions where N=number of provided return addresses, one per address. Could potentially obfuscate further by splitting into M>N transactions and send to each return address more than once
     * Could further randomize return delay
     * Could potentially use some decoy wash transactions with house account to mitigate transaction patterns with low number of concurrent users
