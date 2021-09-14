@@ -43,7 +43,7 @@ Tests: `pytest tests`
     * Mixers should scale horizontally - segment address space and spin up multiple mixers that handle some small number of segments
     * Lots of places in code assume that rest api just works all the time.
 * Security
-    * All methods and variables are currently public to make unit testing easier, but essentially everything about the mixer except start, stop, restore, and create_mix_account should be private
+    * All methods and variables are currently public to make unit testing easier, but essentially everything about the mixer except start, stop, restore, and load_mix_account_in_memory should be private
     * Sanitize inputs, DB is currently wide open
     * All addresses should be encrypted
 * Maintainability and usability
